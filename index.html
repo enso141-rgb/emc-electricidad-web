@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="es-CL">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EMC Electricidad · Modernización eléctrica certificada · Instalador SEC Clase A — Olmué</title>
+<meta name="description" content="EMC Electricidad — Construcciones DAQ. Modernización eléctrica certificada en Olmué y Región de Valparaíso: normalización TE-1, aumento de potencia, factor de potencia, upgrade de tablero y cargadores EV. Instalador SEC Clase A vigente.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Hanken+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --blue-950:#04122b; --blue-900:#071a3a; --blue-800:#0B2E63; --blue-700:#1F4E79;
+  --blue-500:#3A6FA5; --amp:#FFC000; --amp-lt:#FFD23F;
+  --ink:#eaf1fb; --muted:#9db4d4; --line:rgba(58,111,165,.28);
+  --glass:rgba(13,40,84,.45); --glass-brd:rgba(120,160,215,.18);
+  --maxw:1200px;
+  --d:#04122b;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Hanken Grotesk',system-ui,sans-serif;
+  background:var(--blue-950); color:var(--ink);
+  line-height:1.6; -webkit-font-smoothing:antialiased; overflow-x:hidden;
+}
+h1,h2,h3,.display{font-family:'Sora',sans-serif;line-height:1.05;letter-spacing:-.02em}
+.mono{font-family:'JetBrains Mono',monospace}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px}
+.amp{color:var(--amp)}
+
+/* ── ambient background: night panel + grid + glow ── */
+.bg-fx{position:fixed;inset:0;z-index:-2;
+  background:
+    radial-gradient(1100px 700px at 80% -10%, rgba(31,78,121,.55), transparent 60%),
+    radial-gradient(900px 600px at -10% 110%, rgba(11,46,99,.6), transparent 60%),
+    linear-gradient(180deg,#04122b,#061730 55%,#04122b);
+}
+.bg-grid{position:fixed;inset:0;z-index:-1;opacity:.5;
+  background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);
+  background-size:60px 60px;
+  -webkit-mask-image:radial-gradient(1000px 600px at 70% 10%,#000,transparent 75%);
+          mask-image:radial-gradient(1000px 600px at 70% 10%,#000,transparent 75%);
+}
+.grain{position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.05;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.hero-mark{position:absolute;right:clamp(-120px,-6vw,-40px);top:50%;transform:translateY(-50%);
+  width:min(580px,54vw);z-index:0;opacity:.09;pointer-events:none;
+  filter:drop-shadow(0 0 70px rgba(255,192,0,.25))}
+.hero-mark .ring{transform-origin:100px 100px;animation:spin 70s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.hero-seal{position:absolute;top:8px;right:0;width:118px;height:118px;object-fit:contain;z-index:4;
+  background:#fff;border-radius:50%;padding:6px;box-shadow:0 12px 28px rgba(0,0,0,.45),0 0 0 1px rgba(255,192,0,.4);
+  animation:floaty 6s ease-in-out infinite}
+@keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
+@media(max-width:920px){.hero-seal{width:86px;top:0}}
+@media(max-width:560px){.hero-seal{display:none}}
+
+/* ── nav ── */
+header{position:sticky;top:0;z-index:50;backdrop-filter:blur(12px);
+  background:rgba(4,18,43,.72);border-bottom:1px solid var(--glass-brd)}
+nav{display:flex;align-items:center;justify-content:space-between;height:72px}
+.brand{display:flex;align-items:center;gap:12px;font-family:'Sora';font-weight:800;letter-spacing:.02em}
+.brand svg{width:42px;height:42px;flex:0 0 auto;filter:drop-shadow(0 4px 14px rgba(255,192,0,.25))}
+.brand b{font-size:1.18rem}
+.brand small{display:block;font-family:'Hanken Grotesk';font-weight:500;font-size:.62rem;letter-spacing:.18em;color:var(--amp);text-transform:uppercase}
+.navlinks{display:flex;gap:30px;align-items:center}
+.navlinks a{font-size:.92rem;color:var(--muted);font-weight:600;transition:color .2s}
+.navlinks a:hover{color:var(--ink)}
+.btn{display:inline-flex;align-items:center;gap:9px;font-weight:700;font-family:'Sora';
+  padding:13px 22px;border-radius:999px;font-size:.92rem;transition:transform .15s,box-shadow .2s,background .2s;cursor:pointer;border:none}
+.btn-amp{background:linear-gradient(135deg,var(--amp-lt),var(--amp));color:#101a0a;
+  box-shadow:0 8px 26px rgba(255,192,0,.32)}
+.btn-amp:hover{transform:translateY(-2px);box-shadow:0 12px 34px rgba(255,192,0,.5)}
+.btn-ghost{background:transparent;color:var(--ink);border:1px solid var(--glass-brd)}
+.btn-ghost:hover{border-color:var(--amp);color:var(--amp)}
+.nav-cta{display:flex;gap:12px;align-items:center}
+.burger{display:none}
+
+/* ── hero ── */
+.hero{position:relative;padding:clamp(70px,11vw,140px) 0 90px;overflow:hidden}
+.hero-current{position:absolute;inset:0;z-index:0;width:100%;height:100%;pointer-events:none;opacity:.9}
+.hero .wrap{position:relative;z-index:2}
+.eyebrow{display:inline-flex;align-items:center;gap:10px;font-family:'JetBrains Mono';font-size:.74rem;
+  letter-spacing:.2em;text-transform:uppercase;color:var(--amp);
+  border:1px solid var(--glass-brd);border-radius:999px;padding:8px 16px;margin-bottom:26px;background:var(--glass)}
+.eyebrow .dot{width:8px;height:8px;border-radius:50%;background:var(--amp);box-shadow:0 0 0 0 rgba(255,192,0,.6);animation:pulse 2s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(255,192,0,.5)}70%{box-shadow:0 0 0 12px rgba(255,192,0,0)}100%{box-shadow:0 0 0 0 rgba(255,192,0,0)}}
+.hero h1{font-size:clamp(2.6rem,6.4vw,5rem);font-weight:800;max-width:16ch;line-height:1.1}
+.hero h1 .stroke{position:relative;white-space:nowrap;color:var(--amp);
+  text-shadow:0 0 1px rgba(255,192,0,.5);
+  filter:drop-shadow(0 2px 22px rgba(255,192,0,.45))}
+.hero h1 .stroke::after{content:"";position:absolute;left:0;right:0;bottom:.04em;height:.09em;
+  background:linear-gradient(90deg,var(--amp),transparent);border-radius:2px;opacity:.85}
+.hero p.lead{font-size:clamp(1.05rem,1.8vw,1.32rem);color:var(--muted);max-width:54ch;margin:26px 0 36px}
+.hero-cta{display:flex;gap:16px;flex-wrap:wrap;align-items:center}
+.chips{display:flex;gap:12px;flex-wrap:wrap;margin-top:42px}
+.chip{display:inline-flex;align-items:center;gap:8px;font-size:.82rem;font-weight:600;color:var(--ink);
+  background:var(--glass);border:1px solid var(--glass-brd);border-radius:10px;padding:10px 14px}
+.chip svg{width:16px;height:16px;color:var(--amp)}
+
+/* ── stats ── */
+.stats{border-top:1px solid var(--glass-brd);border-bottom:1px solid var(--glass-brd);
+  background:linear-gradient(180deg,rgba(11,46,99,.35),transparent)}
+.stats .wrap{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;padding:48px 24px}
+.stat .num{font-family:'Sora';font-weight:800;font-size:clamp(1.8rem,3.6vw,2.8rem);color:var(--amp);line-height:1}
+.stat .lbl{color:var(--muted);font-size:.86rem;margin-top:8px}
+
+/* ── section heads ── */
+section{position:relative}
+.sec-head{max-width:62ch;margin-bottom:48px}
+.sec-tag{font-family:'JetBrains Mono';font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;color:var(--blue-500)}
+.sec-head h2{font-size:clamp(2rem,4.4vw,3.1rem);font-weight:800;margin:14px 0}
+.sec-head p{color:var(--muted);font-size:1.05rem}
+.pad{padding:clamp(70px,9vw,110px) 0}
+
+/* ── services ── */
+.svc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.card{position:relative;background:var(--glass);border:1px solid var(--glass-brd);border-radius:18px;
+  padding:30px 28px;overflow:hidden;transition:transform .25s,border-color .25s,box-shadow .25s}
+.card::before{content:"";position:absolute;inset:0;border-radius:18px;padding:1px;
+  background:linear-gradient(140deg,rgba(255,210,63,.5),transparent 40%);
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor;mask-composite:exclude;opacity:0;transition:opacity .3s}
+.card:hover{transform:translateY(-6px);border-color:transparent;box-shadow:0 24px 50px rgba(0,0,0,.4)}
+.card:hover::before{opacity:1}
+.card .tagn{font-family:'JetBrains Mono';font-size:.74rem;color:var(--amp);letter-spacing:.1em}
+.card .ic{width:46px;height:46px;border-radius:12px;display:grid;place-items:center;margin:6px 0 16px;
+  background:linear-gradient(135deg,rgba(31,78,121,.9),rgba(11,46,99,.9));border:1px solid var(--glass-brd)}
+.card .ic svg{width:24px;height:24px;color:var(--amp)}
+.card h3{font-size:1.28rem;font-weight:700;margin-bottom:8px}
+.card .solves{color:var(--muted);font-size:.93rem;min-height:54px}
+.card .price{margin-top:18px;display:flex;align-items:baseline;gap:8px;border-top:1px dashed var(--line);padding-top:16px}
+.card .price .from{font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.1em}
+.card .price .val{font-family:'JetBrains Mono';font-weight:700;font-size:1.5rem;color:var(--ink)}
+.card .price .net{font-size:.7rem;color:var(--muted)}
+
+/* ── B2B band ── */
+.band{position:relative;border-radius:24px;overflow:hidden;border:1px solid var(--glass-brd);
+  background:linear-gradient(135deg,rgba(31,78,121,.6),rgba(4,18,43,.7));padding:clamp(36px,5vw,64px)}
+.band-grid{display:grid;grid-template-columns:1.3fr .9fr;gap:40px;align-items:center}
+.band h2{font-size:clamp(1.8rem,3.6vw,2.6rem);font-weight:800;margin-bottom:14px}
+.band p{color:var(--muted);margin-bottom:14px}
+.roi{background:rgba(4,18,43,.6);border:1px solid var(--glass-brd);border-radius:16px;padding:26px}
+.roi .row{display:flex;justify-content:space-between;padding:11px 0;border-bottom:1px solid var(--line);font-size:.95rem}
+.roi .row:last-child{border:none}
+.roi .row b{font-family:'JetBrains Mono';color:var(--amp)}
+
+/* ── process ── */
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;counter-reset:s}
+.step{background:var(--glass);border:1px solid var(--glass-brd);border-radius:16px;padding:26px;position:relative}
+.step::before{counter-increment:s;content:"0" counter(s);font-family:'JetBrains Mono';font-weight:700;
+  font-size:1.4rem;color:var(--amp);opacity:.6}
+.step h4{font-family:'Sora';font-weight:700;margin:10px 0 6px;font-size:1.08rem}
+.step p{color:var(--muted);font-size:.9rem}
+
+/* ── coverage + about ── */
+.split{display:grid;grid-template-columns:1fr 1fr;gap:30px}
+.panel{background:var(--glass);border:1px solid var(--glass-brd);border-radius:18px;padding:34px}
+.panel h3{font-size:1.4rem;font-weight:700;margin-bottom:16px}
+.cov-list{display:flex;flex-direction:column;gap:12px}
+.cov{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid var(--line)}
+.cov:last-child{border:none}
+.cov b{font-family:'JetBrains Mono';color:var(--amp);font-size:.86rem}
+.about-cred{display:flex;gap:16px;align-items:center;margin-top:18px;padding:16px;border:1px solid var(--glass-brd);border-radius:12px;background:rgba(4,18,43,.4)}
+.about-cred .seal{width:54px;height:54px;flex:0 0 auto;border-radius:12px;display:grid;place-items:center;
+  background:linear-gradient(135deg,var(--amp-lt),var(--amp));color:#101a0a;font-family:'Sora';font-weight:800;font-size:1.4rem}
+
+/* ── final cta ── */
+.final{text-align:center;border-radius:24px;border:1px solid var(--glass-brd);padding:clamp(46px,6vw,80px);
+  background:radial-gradient(700px 300px at 50% 0%,rgba(255,192,0,.12),transparent 70%),linear-gradient(180deg,rgba(31,78,121,.4),rgba(4,18,43,.5))}
+.final h2{font-size:clamp(2rem,4.6vw,3.2rem);font-weight:800;max-width:18ch;margin:0 auto 18px}
+.final p{color:var(--muted);max-width:48ch;margin:0 auto 30px}
+
+/* ── footer ── */
+footer{border-top:1px solid var(--glass-brd);margin-top:90px;padding:54px 0 40px;color:var(--muted);font-size:.9rem}
+.foot-grid{display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:30px;margin-bottom:34px}
+footer a:hover{color:var(--amp)}
+footer h5{font-family:'Sora';color:var(--ink);font-size:.95rem;margin-bottom:14px}
+.foot-bot{border-top:1px solid var(--line);padding-top:20px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;font-size:.8rem}
+
+/* ── floating whatsapp ── */
+.wa-float{position:fixed;right:22px;bottom:22px;z-index:60;display:flex;align-items:center;gap:10px;
+  background:#25D366;color:#06310f;font-weight:700;font-family:'Sora';padding:14px 20px;border-radius:999px;
+  box-shadow:0 10px 30px rgba(37,211,102,.4);transition:transform .15s}
+.wa-float:hover{transform:scale(1.05)}
+.wa-float svg{width:22px;height:22px}
+
+/* reveal */
+.reveal{opacity:0;transform:translateY(26px);transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .7s cubic-bezier(.2,.7,.2,1)}
+.reveal.in{opacity:1;transform:none}
+
+/* ── scroll progress bar ── */
+.progress{position:fixed;top:0;left:0;height:3px;width:0;z-index:100;
+  background:linear-gradient(90deg,var(--amp-lt),var(--amp));box-shadow:0 0 14px rgba(255,192,0,.7)}
+
+/* ── marquee ticker (idea: agency/electrician themes) ── */
+.ticker{overflow:hidden;border-top:1px solid var(--glass-brd);border-bottom:1px solid var(--glass-brd);
+  background:linear-gradient(90deg,rgba(11,46,99,.45),rgba(4,18,43,.15));padding:15px 0;white-space:nowrap;
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);
+          mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
+.ticker-track{display:inline-flex;animation:marq 30s linear infinite;will-change:transform}
+.ticker:hover .ticker-track{animation-play-state:paused}
+.ticker span{font-family:'Sora';font-weight:700;font-size:1.02rem;color:var(--ink);
+  display:inline-flex;align-items:center;gap:22px;padding:0 24px}
+.ticker span::after{content:"";width:7px;height:7px;border-radius:50%;background:var(--amp);box-shadow:0 0 10px var(--amp)}
+@keyframes marq{to{transform:translateX(-50%)}}
+
+/* ── process timeline line ── */
+.steps{position:relative}
+.steps::before{content:"";position:absolute;top:38px;left:7%;right:7%;height:2px;background:var(--line);z-index:0}
+.steps::after{content:"";position:absolute;top:38px;left:7%;height:2px;width:0;z-index:0;
+  background:linear-gradient(90deg,var(--amp),rgba(255,192,0,.2));box-shadow:0 0 12px rgba(255,192,0,.6);
+  transition:width 1.8s cubic-bezier(.2,.7,.2,1)}
+.steps.go::after{width:86%}
+.steps .step{z-index:1}
+
+/* parallax hint */
+.hero-mark,.bg-grid{will-change:transform}
+
+/* ── galería trabajos ── */
+.gal{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.work{position:relative;border-radius:16px;overflow:hidden;border:1px solid var(--glass-brd);aspect-ratio:4/3;
+  background:linear-gradient(135deg,rgba(31,78,121,.5),rgba(4,18,43,.75));display:grid;place-items:center;
+  transition:transform .25s,box-shadow .25s}
+.work:hover{transform:translateY(-5px);box-shadow:0 22px 46px rgba(0,0,0,.4)}
+.work img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.work .ph{display:flex;flex-direction:column;align-items:center;gap:8px;color:var(--muted);text-align:center;padding:14px}
+.work .ph svg{width:32px;height:32px;color:var(--blue-500)}
+.work .ph small{font-size:.74rem;opacity:.8}
+.work .cap{position:absolute;left:0;right:0;bottom:0;padding:16px;font-size:.88rem;font-weight:600;z-index:2;
+  background:linear-gradient(0deg,rgba(4,18,43,.94),rgba(4,18,43,.4) 70%,transparent)}
+.work .tag{position:absolute;top:12px;left:12px;z-index:2;font-family:'JetBrains Mono';font-size:.64rem;letter-spacing:.1em;
+  background:var(--amp);color:#101a0a;padding:4px 9px;border-radius:6px;font-weight:700}
+.reviews{display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;margin-top:30px;
+  background:var(--glass);border:1px solid var(--glass-brd);border-radius:18px;padding:24px 28px}
+.stars{color:var(--amp);font-size:1.2rem;letter-spacing:2px}
+
+/* ── FAQ ── */
+.faq{display:grid;gap:12px;max-width:840px}
+.faq details{background:var(--glass);border:1px solid var(--glass-brd);border-radius:14px;padding:0 22px;transition:border-color .2s}
+.faq details[open]{border-color:rgba(255,192,0,.35)}
+.faq summary{list-style:none;cursor:pointer;padding:20px 0;font-family:'Sora';font-weight:600;font-size:1.02rem;
+  display:flex;justify-content:space-between;align-items:center;gap:16px}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";color:var(--amp);font-size:1.6rem;line-height:1;transition:transform .25s}
+.faq details[open] summary::after{transform:rotate(45deg)}
+.faq details p{color:var(--muted);padding:0 0 20px;font-size:.96rem;margin:0}
+
+/* ── form ── */
+.contact-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:36px;align-items:start}
+.form{display:grid;gap:16px}
+.form .row2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.field label{display:block;font-size:.8rem;color:var(--muted);margin-bottom:6px;font-weight:600}
+.field input,.field select,.field textarea{width:100%;background:rgba(4,18,43,.6);border:1px solid var(--glass-brd);
+  border-radius:10px;padding:13px 14px;color:var(--ink);font-family:inherit;font-size:.95rem;transition:border-color .2s}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--amp);box-shadow:0 0 0 3px rgba(255,192,0,.12)}
+.field textarea{resize:vertical;min-height:104px}
+.field select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none' stroke='%239db4d4' stroke-width='2'%3E%3Cpath d='M1 1l5 5 5-5'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center}
+.cinfo{background:var(--glass);border:1px solid var(--glass-brd);border-radius:18px;padding:30px}
+.cinfo .ci{display:flex;gap:14px;align-items:flex-start;padding:14px 0;border-bottom:1px solid var(--line)}
+.cinfo .ci:last-child{border:none}
+.cinfo .ci svg{width:20px;height:20px;color:var(--amp);flex:0 0 auto;margin-top:3px}
+.cinfo .ci b{font-family:'Sora';display:block;font-size:.95rem}
+.cinfo .ci span{color:var(--muted);font-size:.9rem}
+
+@media(max-width:920px){
+  .navlinks{display:none}
+  .stats .wrap{grid-template-columns:repeat(2,1fr)}
+  .svc-grid{grid-template-columns:1fr 1fr}
+  .band-grid,.split{grid-template-columns:1fr}
+  .steps{grid-template-columns:1fr 1fr}
+  .foot-grid{grid-template-columns:1fr 1fr}
+  .gal{grid-template-columns:1fr 1fr}
+  .contact-grid{grid-template-columns:1fr}
+  .steps::before,.steps::after{display:none}
+}
+@media(max-width:560px){
+  .svc-grid,.steps,.foot-grid,.gal{grid-template-columns:1fr}
+  .form .row2{grid-template-columns:1fr}
+  .nav-cta .btn-text{display:none}
+  .wa-float span{display:none}
+}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.reveal{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+<div class="progress" id="prog"></div>
+<div class="bg-fx"></div>
+<div class="bg-grid"></div>
+<div class="grain"></div>
+
+<!-- ░░ LOGO (inline, marca EMC premium) ░░ -->
+<svg width="0" height="0" style="position:absolute"><defs>
+  <linearGradient id="badge" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1F4E79"/><stop offset="1" stop-color="#0B2E63"/></linearGradient>
+  <linearGradient id="bolt" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFD23F"/><stop offset="1" stop-color="#FFC000"/></linearGradient>
+  <linearGradient id="m-disc" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2A5E8C"/><stop offset=".55" stop-color="#0B2E63"/><stop offset="1" stop-color="#04122B"/></linearGradient>
+  <linearGradient id="m-ring" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFD23F"/><stop offset=".5" stop-color="#FFC000"/><stop offset="1" stop-color="#3A6FA5"/></linearGradient>
+  <linearGradient id="m-bolt" x1=".2" y1="0" x2=".8" y2="1"><stop offset="0" stop-color="#FFE587"/><stop offset=".5" stop-color="#FFD23F"/><stop offset="1" stop-color="#FFB300"/></linearGradient>
+  <radialGradient id="m-glow" cx=".5" cy=".42" r=".6"><stop offset="0" stop-color="#FFC000" stop-opacity=".5"/><stop offset="1" stop-color="#FFC000" stop-opacity="0"/></radialGradient>
+  <linearGradient id="c-tile" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2A5E8C"/><stop offset=".5" stop-color="#11366E"/><stop offset="1" stop-color="#06204A"/></linearGradient>
+  <linearGradient id="c-bolt" x1=".2" y1="0" x2=".8" y2="1"><stop offset="0" stop-color="#FFE587"/><stop offset=".5" stop-color="#FFD23F"/><stop offset="1" stop-color="#FFB300"/></linearGradient>
+  <radialGradient id="c-glow" cx=".5" cy=".46" r=".55"><stop offset="0" stop-color="#FFC000" stop-opacity=".35"/><stop offset="1" stop-color="#FFC000" stop-opacity="0"/></radialGradient>
+  <linearGradient id="sec-bolt" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFD23F"/><stop offset="1" stop-color="#FFC000"/></linearGradient>
+  <filter id="c-sh" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="2" stdDeviation="5" flood-color="#FFC000" flood-opacity="0.5"/></filter>
+</defs></svg>
+
+<!-- EMC house logo + SEC seal symbols -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="emc-logo" viewBox="0 0 200 200">
+    <rect x="6" y="6" width="188" height="188" rx="46" fill="url(#c-tile)"/>
+    <rect x="6" y="6" width="188" height="188" rx="46" fill="url(#c-glow)"/>
+    <rect x="6.5" y="6.5" width="187" height="187" rx="45.5" fill="none" stroke="#5B8FC7" stroke-width="1" opacity=".35"/>
+    <path d="M52 158 V96 L100 54 L148 96 V158" fill="none" stroke="#EAF1FB" stroke-width="11" stroke-linejoin="round" stroke-linecap="round"/>
+    <path d="M44 158 H156" stroke="#EAF1FB" stroke-width="11" stroke-linecap="round"/>
+    <g stroke="#5B8FC7" stroke-width="7" stroke-linecap="round"><path d="M70 158 V170"/><path d="M86 158 V170"/></g>
+    <path d="M110 70 L82 116 H99 L90 150 L124 100 H105 Z" fill="url(#c-bolt)" stroke="#06204A" stroke-width="3" stroke-linejoin="round" filter="url(#c-sh)"/>
+    <g stroke="#FFD23F" stroke-width="5" stroke-linecap="round" fill="none" opacity=".95"><path d="M150 72 q14 6 14 22"/></g>
+    <g fill="#FFD23F"><rect x="156" y="58" width="16" height="11" rx="3"/><rect x="158" y="50" width="3.4" height="9" rx="1.7"/><rect x="166.6" y="50" width="3.4" height="9" rx="1.7"/></g>
+  </symbol>
+  <symbol id="sec-seal" viewBox="0 0 200 200">
+    <defs>
+      <path id="sec-top" d="M 34 100 A 66 66 0 0 1 166 100"/>
+      <path id="sec-bot" d="M 166 100 A 66 66 0 0 1 34 100"/>
+    </defs>
+    <circle cx="100" cy="100" r="95" fill="#FFFFFF"/>
+    <circle cx="100" cy="100" r="95" fill="none" stroke="#1F4E79" stroke-width="3"/>
+    <circle cx="100" cy="100" r="74" fill="none" stroke="#1F4E79" stroke-width="2"/>
+    <text font-family="'Sora',sans-serif" font-weight="800" fill="#1F4E79" font-size="15.5" letter-spacing="2"><textPath href="#sec-top" startOffset="50%" text-anchor="middle">INSTALADOR ELÉCTRICO</textPath></text>
+    <text font-family="'Sora',sans-serif" font-weight="800" fill="#1F4E79" font-size="15.5" letter-spacing="2.5"><textPath href="#sec-bot" startOffset="50%" text-anchor="middle">CERTIFICADO · CLASE A</textPath></text>
+    <g fill="#FFC000"><circle cx="34" cy="100" r="3.4"/><circle cx="166" cy="100" r="3.4"/></g>
+    <text x="100" y="96" text-anchor="middle" font-family="'Sora',sans-serif" font-weight="800" font-size="46" letter-spacing="2" fill="#1F4E79">SEC</text>
+    <path d="M104 104 L92 124 H100 L96 140 L112 118 H103 Z" fill="url(#sec-bolt)" stroke="#1F4E79" stroke-width="1.6" stroke-linejoin="round"/>
+    <text x="100" y="150" text-anchor="middle" font-family="'Hanken Grotesk',sans-serif" font-weight="700" font-size="9.5" letter-spacing="1.5" fill="#3A6FA5">SEC · CHILE</text>
+  </symbol>
+</svg>
+
+<!-- reusable EMC seal mark -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="emc-seal" viewBox="0 0 200 200">
+  <circle cx="100" cy="100" r="92" fill="none" stroke="url(#m-ring)" stroke-width="5"/>
+  <g stroke="#3A6FA5" stroke-width="3" stroke-linecap="round" opacity=".85">
+    <line x1="100" y1="14" x2="100" y2="24"/><line x1="100" y1="14" x2="100" y2="24" transform="rotate(30 100 100)"/><line x1="100" y1="14" x2="100" y2="24" transform="rotate(60 100 100)"/><line x1="100" y1="14" x2="100" y2="24" transform="rotate(90 100 100)"/><line x1="100" y1="14" x2="100" y2="24" transform="rotate(120 100 100)"/><line x1="100" y1="14" x2="100" y2="24" transform="rotate(150 100 100)"/><line x1="100" y1="14" x2="100" y2="24" transform="rotate(180 100 100)"/><line x1="100" y1="14" x2="100" y2="24" transform="rotate(210 100 100)"/><line x1="100" y1="14" x2="100" y2="24" transform="rotate(240 100 100)"/><line x1="100" y1="14" x2="100" y2="24" transform="rotate(270 100 100)"/><line x1="100" y1="14" x2="100" y2="24" transform="rotate(300 100 100)"/><line x1="100" y1="14" x2="100" y2="24" transform="rotate(330 100 100)"/>
+  </g>
+  <circle cx="100" cy="100" r="76" fill="url(#m-disc)"/>
+  <circle cx="100" cy="100" r="76" fill="url(#m-glow)"/>
+  <circle cx="100" cy="100" r="76" fill="none" stroke="#3A6FA5" stroke-width="1.5" opacity=".4"/>
+  <g stroke="#3A6FA5" stroke-width="3" stroke-linecap="round" opacity=".55" fill="#3A6FA5">
+    <path d="M44 78 H66" fill="none"/><circle cx="72" cy="78" r="4.5" stroke="none"/>
+    <path d="M44 122 H60" fill="none"/><circle cx="66" cy="122" r="4.5" stroke="none"/>
+    <path d="M156 92 H134" fill="none"/><circle cx="128" cy="92" r="4.5" stroke="none"/>
+    <path d="M156 132 H140" fill="none"/><circle cx="134" cy="132" r="4.5" stroke="none"/>
+  </g>
+  <path d="M118 44 L78 104 H100 L86 152 L132 92 H108 Z" fill="url(#m-bolt)" stroke="#04122B" stroke-width="3.5" stroke-linejoin="round"/>
+  <text x="100" y="176" text-anchor="middle" font-family="'Sora',sans-serif" font-size="22" font-weight="800" fill="#fff" letter-spacing="5">EMC</text>
+</symbol></svg>
+
+<header>
+  <nav class="wrap">
+    <a class="brand" href="#top" aria-label="EMC Electricidad">
+      <svg viewBox="0 0 200 200" aria-hidden="true"><use href="#emc-logo"/></svg>
+      <span><b>EMC Electricidad</b><small>Instalador SEC Clase A</small></span>
+    </a>
+    <div class="navlinks">
+      <a href="#servicios">Servicios</a>
+      <a href="#factor">Empresas</a>
+      <a href="#proceso">Cómo trabajo</a>
+      <a href="#trabajos">Trabajos</a>
+      <a href="#faq">FAQ</a>
+      <a href="#contacto">Contacto</a>
+    </div>
+    <div class="nav-cta">
+      <a class="btn btn-amp" href="https://wa.me/56985295633?text=Hola%20EMC%2C%20quiero%20cotizar%20un%20trabajo%20el%C3%A9ctrico" target="_blank" rel="noopener">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M.057 24l1.687-6.163a11.867 11.867 0 01-1.587-5.946C.16 5.335 5.495 0 12.05 0a11.82 11.82 0 018.413 3.488 11.82 11.82 0 013.48 8.414c-.003 6.557-5.338 11.892-11.893 11.892a11.9 11.9 0 01-5.688-1.448L.057 24zM6.597 20.13c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884a9.86 9.86 0 001.51 5.26l-.999 3.648 3.978-.607zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+        <span class="btn-text">WhatsApp</span>
+      </a>
+    </div>
+  </nav>
+</header>
+
+<main id="top">
+<!-- ░░ HERO ░░ -->
+<section class="hero">
+  <svg class="hero-mark" viewBox="0 0 200 200" aria-hidden="true">
+    <circle class="ring" cx="100" cy="100" r="96" fill="none" stroke="url(#m-ring)" stroke-width="1.5" stroke-dasharray="6 12"/>
+    <use href="#emc-seal"/>
+  </svg>
+  <svg class="hero-current" viewBox="0 0 1440 600" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <path id="circuit" d="M-50 120 H320 a30 30 0 0 1 30 30 V320 a30 30 0 0 0 30 30 H760 a30 30 0 0 1 30 30 V470 a30 30 0 0 0 30 30 H1500"
+      fill="none" stroke="#3A6FA5" stroke-width="2" opacity=".35"/>
+    <path d="M-50 120 H320 a30 30 0 0 1 30 30 V320 a30 30 0 0 0 30 30 H760 a30 30 0 0 1 30 30 V470 a30 30 0 0 0 30 30 H1500"
+      fill="none" stroke="url(#bolt)" stroke-width="3" stroke-linecap="round"
+      stroke-dasharray="60 1200" style="filter:drop-shadow(0 0 8px rgba(255,192,0,.9))">
+      <animate attributeName="stroke-dashoffset" from="1260" to="0" dur="5s" repeatCount="indefinite"/>
+    </path>
+    <g fill="#3A6FA5" opacity=".5">
+      <circle cx="350" cy="150" r="5"/><circle cx="790" cy="380" r="5"/><circle cx="380" cy="350" r="4"/>
+    </g>
+  </svg>
+  <div class="wrap">
+    <img class="hero-seal" src="assets/sello-sec.png" alt="Personal Certificado SEC" loading="lazy">
+    <span class="eyebrow reveal"><span class="dot"></span> Olmué · Marga Marga · Valparaíso</span>
+    <h1 class="reveal">Modernización eléctrica <span class="stroke">certificada</span> para tu casa o empresa.</h1>
+    <p class="lead reveal">Tableros que dejan de saltar, instalaciones seguras y al día con la norma. Diagnóstico técnico, ejecución y <b class="amp">certificación SEC con TE‑1</b> — todo con un Instalador Eléctrico Clase A vigente.</p>
+    <div class="hero-cta reveal">
+      <a class="btn btn-amp" href="https://wa.me/56985295633?text=Hola%20EMC%2C%20quiero%20agendar%20una%20visita%20diagn%C3%B3stica" target="_blank" rel="noopener">Agendar visita diagnóstica →</a>
+      <a class="btn btn-ghost" href="#servicios">Ver servicios</a>
+    </div>
+    <div class="chips reveal">
+      <span class="chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6z"/><path d="M9 12l2 2 4-4"/></svg> SEC Clase A vigente</span>
+      <span class="chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h10"/></svg> TE‑1 con memoria y plano</span>
+      <span class="chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 8v4l3 2"/><circle cx="12" cy="12" r="9"/></svg> 12 meses de garantía</span>
+      <span class="chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 10h18"/></svg> Factura electrónica</span>
+    </div>
+  </div>
+</section>
+
+<!-- ░░ STATS ░░ -->
+<div class="stats">
+  <div class="wrap">
+    <div class="stat reveal"><div class="num"><span data-count="100">0</span>%</div><div class="lbl">Trabajos con certificación SEC</div></div>
+    <div class="stat reveal"><div class="num"><span data-count="12">0</span> meses</div><div class="lbl">Garantía sobre mano de obra</div></div>
+    <div class="stat reveal"><div class="num">&lt;<span data-count="2">0</span> años</div><div class="lbl">Payback típico en factor de potencia</div></div>
+    <div class="stat reveal"><div class="num"><span data-count="5">0</span> líneas</div><div class="lbl">Servicios de modernización P1–P5</div></div>
+  </div>
+</div>
+
+<!-- ░░ TICKER ░░ -->
+<div class="ticker" aria-hidden="true">
+  <div class="ticker-track">
+    <span>Normalización TE‑1</span><span>Aumento de potencia</span><span>Factor de potencia</span><span>Upgrade de tablero</span><span>Cargadores EV</span><span>Termografía</span><span>Puesta a tierra</span><span>Megger / aislación</span>
+    <span>Normalización TE‑1</span><span>Aumento de potencia</span><span>Factor de potencia</span><span>Upgrade de tablero</span><span>Cargadores EV</span><span>Termografía</span><span>Puesta a tierra</span><span>Megger / aislación</span>
+  </div>
+</div>
+
+<!-- ░░ SERVICIOS ░░ -->
+<section id="servicios" class="pad">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="sec-tag">// Servicios</div>
+      <h2>Cinco formas de dejar tu instalación segura y al día.</h2>
+      <p>Precios “desde”, valores netos (+IVA). El valor final se confirma en visita técnica — abonable al trabajo si contratas.</p>
+    </div>
+    <div class="svc-grid">
+
+      <article class="card reveal">
+        <div class="tagn">P1</div>
+        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21V8l9-5 9 5v13"/><path d="M9 21v-6h6v6"/></svg></div>
+        <h3>Normalización de circuitos</h3>
+        <p class="solves">Instalación antigua, sin diferencial o con circuitos mezclados. Te deja con TE‑1 vigente para vender, arrendar o quedar seguro.</p>
+        <div class="price"><span class="from">Desde</span><span class="val">$750.000</span><span class="net">neto</span></div>
+      </article>
+
+      <article class="card reveal">
+        <div class="tagn">P2</div>
+        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h7l-1 8 10-12h-7z"/></svg></div>
+        <h3>Aumento de potencia + alimentador</h3>
+        <p class="solves">El tablero “salta”, pusiste cocina eléctrica o necesitas trifásico. Incluyo la gestión del aumento con tu distribuidora.</p>
+        <div class="price"><span class="from">Desde</span><span class="val">$650.000</span><span class="net">neto</span></div>
+      </article>
+
+      <article class="card reveal">
+        <div class="tagn">P4</div>
+        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 7h8M8 11h8M8 15h5"/></svg></div>
+        <h3>Upgrade de tablero</h3>
+        <p class="solves">Tablero de fusibles o sin protecciones = riesgo de incendio. Reemplazo por uno normalizado con diferencial 30 mA y protección de sobretensión.</p>
+        <div class="price"><span class="from">Desde</span><span class="val">$450.000</span><span class="net">neto</span></div>
+      </article>
+
+      <article class="card reveal">
+        <div class="tagn">P5</div>
+        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="6" width="13" height="12" rx="2"/><path d="M16 10h3l2 2v4h-5"/><circle cx="7" cy="20" r="1.5"/><circle cx="14" cy="20" r="1.5"/><path d="M9 6V4h4v2"/></svg></div>
+        <h3>Cargador para auto eléctrico</h3>
+        <p class="solves">Carga segura en casa: circuito dedicado, protección tipo A/B, puesta a tierra y certificación TE‑1. Se combina con aumento de potencia.</p>
+        <div class="price"><span class="from">Desde</span><span class="val">$480.000</span><span class="net">neto</span></div>
+      </article>
+
+      <article class="card reveal">
+        <div class="tagn">P3 · Empresas</div>
+        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/></svg></div>
+        <h3>Corrección de factor de potencia</h3>
+        <p class="solves">¿Te cobran “bajo factor de potencia” en la boleta? El ahorro paga el trabajo. Parto con un diagnóstico de 7 días + ingeniería del banco.</p>
+        <div class="price"><span class="from">Diagnóstico</span><span class="val">$2.200.000</span><span class="net">neto</span></div>
+      </article>
+
+      <article class="card reveal" style="display:flex;flex-direction:column;justify-content:center;background:linear-gradient(135deg,rgba(255,192,0,.12),rgba(11,46,99,.3));border-color:rgba(255,192,0,.3)">
+        <h3 style="font-size:1.35rem">¿No sabes qué necesitas?</h3>
+        <p class="solves" style="min-height:auto;margin-bottom:18px">Agendo una <b class="amp">visita diagnóstica</b> ($45.000 neto, abonable al trabajo), reviso tu instalación y te entrego un plan claro.</p>
+        <a class="btn btn-amp" href="https://wa.me/56985295633?text=Hola%20EMC%2C%20quiero%20una%20visita%20diagn%C3%B3stica" target="_blank" rel="noopener" style="align-self:flex-start">Agendar visita →</a>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ░░ FACTOR DE POTENCIA / B2B ░░ -->
+<section id="factor" class="pad" style="padding-top:0">
+  <div class="wrap">
+    <div class="band reveal">
+      <div class="band-grid">
+        <div>
+          <div class="sec-tag">// Para empresas y comercios</div>
+          <h2>El recargo de tu boleta puede financiar la solución.</h2>
+          <p>Si tu medidor trifásico marca “bajo factor de potencia”, estás pagando un recargo evitable todos los meses. Mido 7 días con analizador (FP, demanda y THD), dimensiono el banco de condensadores justo y el ahorro hace el resto.</p>
+          <p style="margin-bottom:26px">Pídeme revisar tu boleta y te muestro el número.</p>
+          <a class="btn btn-amp" href="https://wa.me/56985295633?text=Hola%20EMC%2C%20quiero%20revisar%20el%20factor%20de%20potencia%20de%20mi%20empresa" target="_blank" rel="noopener">Quiero revisar mi boleta →</a>
+        </div>
+        <div class="roi">
+          <div style="font-family:'JetBrains Mono';font-size:.74rem;letter-spacing:.15em;color:var(--muted);text-transform:uppercase;margin-bottom:8px">Caso real · banco 150 kVAr</div>
+          <div class="row"><span>Inversión (banco instalado)</span><b>$6,52 MM</b></div>
+          <div class="row"><span>Recargo evitado / año</span><b>≈ $5,66 MM</b></div>
+          <div class="row"><span>Payback</span><b>19–23 meses</b></div>
+          <div class="row"><span>Después del payback</span><b class="amp">ahorro neto</b></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ░░ PROCESO ░░ -->
+<section id="proceso" class="pad" style="padding-top:0">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="sec-tag">// Cómo trabajo</div>
+      <h2>Sin sorpresas, paso a paso.</h2>
+    </div>
+    <div class="steps" id="steps">
+      <div class="step reveal"><h4>Visita diagnóstica</h4><p>Reviso tu instalación en terreno. $45.000 abonables al trabajo si contratas.</p></div>
+      <div class="step reveal"><h4>Cotización clara</h4><p>Recibes alcance, valores netos y plazo por escrito. Validez 30 días.</p></div>
+      <div class="step reveal"><h4>Ejecución certificada</h4><p>Mano de obra Clase A con EPP, equipos normados y pruebas (megger, PT).</p></div>
+      <div class="step reveal"><h4>TE‑1 y garantía</h4><p>Entrego certificación SEC, memoria y plano. 12 meses de garantía.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ░░ COBERTURA + SOBRE ░░ -->
+<section id="cobertura" class="pad" style="padding-top:0">
+  <div class="wrap">
+    <div class="split">
+      <div class="panel reveal">
+        <h3>Zona de cobertura</h3>
+        <div class="cov-list">
+          <div class="cov"><span>Olmué</span><b>Traslado incluido</b></div>
+          <div class="cov"><span>Marga Marga · Limache, Quilpué, Villa Alemana</span><b>+ $25.000</b></div>
+          <div class="cov"><span>Región de Valparaíso</span><b>+ $45.000</b></div>
+          <div class="cov"><span>Emergencias &lt; 4 h</span><b>recargo +40%</b></div>
+        </div>
+      </div>
+      <div class="panel reveal">
+        <h3>Tu instalador</h3>
+        <p style="color:var(--muted)">Edinson Moreno Carrasco — Instalador Eléctrico Autorizado SEC Clase A, formado en Ingeniería en Electricidad y Electrónica. Trabajo bajo RIC, NFPA 70E e IEC aplicables.</p>
+        <div class="about-cred">
+          <img src="assets/sello-sec.png" alt="Personal Certificado SEC" style="width:78px;height:78px;flex:0 0 auto;background:#fff;border-radius:50%;padding:5px;object-fit:contain" loading="lazy">
+          <div>
+            <div style="font-family:'Sora';font-weight:700">Instalador certificado SEC — Clase A vigente</div>
+            <div style="color:var(--muted);font-size:.86rem">Construcciones DAQ · RUT 10.820.250‑0 · Factura electrónica</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ░░ TRABAJOS / GALERÍA ░░ -->
+<section id="trabajos" class="pad" style="padding-top:0">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="sec-tag">// Trabajos</div>
+      <h2>Antes y después, con respaldo técnico.</h2>
+      <p>Cada intervención queda documentada con informe y certificación. Reemplaza estos espacios con fotos reales de tus trabajos (carpeta <code>web/assets/trabajos/</code>).</p>
+    </div>
+    <div class="gal">
+      <figure class="work reveal"><span class="tag">ANTES</span>
+        <div class="ph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8"/></svg><small>Tablero de fusibles</small></div>
+        <figcaption class="cap">Tablero antiguo sin diferencial</figcaption></figure>
+      <figure class="work reveal"><span class="tag">DESPUÉS</span>
+        <div class="ph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 7h8M8 11h8M8 15h5"/></svg><small>Tablero normalizado</small></div>
+        <figcaption class="cap">Diferencial 30 mA + termomagnéticos + DPS</figcaption></figure>
+      <figure class="work reveal"><span class="tag">P3</span>
+        <div class="ph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/></svg><small>Banco de condensadores</small></div>
+        <figcaption class="cap">Corrección de factor de potencia B2B</figcaption></figure>
+      <figure class="work reveal"><span class="tag">TERMOGRAFÍA</span>
+        <div class="ph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><small>Punto caliente detectado</small></div>
+        <figcaption class="cap">Inspección termográfica + informe</figcaption></figure>
+      <figure class="work reveal"><span class="tag">P5</span>
+        <div class="ph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="6" width="13" height="12" rx="2"/><path d="M16 10h3l2 2v4h-5"/></svg><small>Cargador EV</small></div>
+        <figcaption class="cap">Circuito dedicado + certificación TE‑1</figcaption></figure>
+      <figure class="work reveal"><span class="tag">PT</span>
+        <div class="ph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3v9M5 12h14M8 16h8M10 20h4"/></svg><small>Malla de tierra</small></div>
+        <figcaption class="cap">Medición de puesta a tierra + certificado</figcaption></figure>
+    </div>
+    <div class="reviews reveal">
+      <div>
+        <div class="stars">★★★★★</div>
+        <div style="font-family:'Sora';font-weight:700;margin-top:4px">¿Trabajamos juntos? Tu reseña ayuda a otros vecinos.</div>
+        <div style="color:var(--muted);font-size:.9rem">Califícame en Google y comparte tu experiencia.</div>
+      </div>
+      <a class="btn btn-ghost" href="https://wa.me/56985295633?text=Hola%20EMC%2C%20quiero%20dejar%20una%20rese%C3%B1a" target="_blank" rel="noopener">Dejar reseña →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ░░ FAQ ░░ -->
+<section id="faq" class="pad" style="padding-top:0">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="sec-tag">// Preguntas frecuentes</div>
+      <h2>Lo que suelen preguntarme.</h2>
+    </div>
+    <div class="faq">
+      <details class="reveal" open><summary>¿Entregan certificación SEC?</summary><p>Sí. Todo trabajo que lo requiere se entrega con declaración TE‑1, memoria técnica y plano, ejecutado por Instalador Eléctrico Autorizado Clase A.</p></details>
+      <details class="reveal"><summary>¿La visita diagnóstica tiene costo?</summary><p>Tiene un valor de $45.000 neto, abonable al trabajo si contratas. Reviso la instalación en terreno y entrego un plan claro con alcance y valores.</p></details>
+      <details class="reveal"><summary>¿Gestionan el aumento de potencia con la distribuidora?</summary><p>Sí. Hago el estudio de carga, el cambio de alimentador y la gestión de la solicitud ante Chilquinta, CGE o Enel según corresponda. No incluye derechos ni obras propias de la distribuidora.</p></details>
+      <details class="reveal"><summary>¿Emiten factura?</summary><p>Sí, factura electrónica a nombre de Construcciones DAQ (RUT 10.820.250‑0). Valores netos, se agrega 19% de IVA.</p></details>
+      <details class="reveal"><summary>¿Qué garantía tienen los trabajos?</summary><p>12 meses sobre mano de obra. Los equipos se rigen por la garantía de cada fabricante.</p></details>
+      <details class="reveal"><summary>¿Qué zonas cubren?</summary><p>Olmué con traslado incluido; Marga Marga (Limache, Quilpué, Villa Alemana) con +$25.000; resto de la Región de Valparaíso +$45.000. Emergencias &lt;4 h con recargo.</p></details>
+    </div>
+  </div>
+</section>
+
+<!-- ░░ CONTACTO ░░ -->
+<section id="contacto" class="pad" style="padding-top:0">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="sec-tag">// Contacto</div>
+      <h2>Cuéntame tu caso.</h2>
+      <p>Completa y se abre WhatsApp con tu mensaje listo para enviar. Respondo a la brevedad.</p>
+    </div>
+    <div class="contact-grid">
+      <form class="form reveal" id="ctaForm">
+        <div class="row2">
+          <div class="field"><label for="f-nom">Nombre</label><input id="f-nom" type="text" required placeholder="Tu nombre"></div>
+          <div class="field"><label for="f-com">Comuna</label><input id="f-com" type="text" placeholder="Olmué, Limache…"></div>
+        </div>
+        <div class="field"><label for="f-srv">¿Qué necesitas?</label>
+          <select id="f-srv">
+            <option>Visita diagnóstica</option>
+            <option>P1 · Normalización de circuitos</option>
+            <option>P2 · Aumento de potencia</option>
+            <option>P3 · Factor de potencia (empresa)</option>
+            <option>P4 · Upgrade de tablero</option>
+            <option>P5 · Cargador EV</option>
+            <option>Otro / no estoy seguro</option>
+          </select>
+        </div>
+        <div class="field"><label for="f-msg">Describe el síntoma o el trabajo</label><textarea id="f-msg" placeholder="Ej: el diferencial salta al usar el horno…"></textarea></div>
+        <button class="btn btn-amp" type="submit" style="justify-content:center">Enviar por WhatsApp →</button>
+      </form>
+      <aside class="cinfo reveal">
+        <div class="ci"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M.057 24l1.687-6.163a11.867 11.867 0 01-1.587-5.946C.16 5.335 5.495 0 12.05 0a11.82 11.82 0 018.413 3.488 11.82 11.82 0 013.48 8.414c-.003 6.557-5.338 11.892-11.893 11.892a11.9 11.9 0 01-5.688-1.448L.057 24z"/></svg><div><b>WhatsApp</b><span>+56 9 8529 5633</span></div></div>
+        <div class="ci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg><div><b>Email</b><span>enso141@gmail.com</span></div></div>
+        <div class="ci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-5.5-7-11a7 7 0 0114 0c0 5.5-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg><div><b>Ubicación</b><span>Calle Isla Mocha #508, Olmué · R. Valparaíso</span></div></div>
+        <div class="ci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><div><b>Horario</b><span>Lun a Sáb · Emergencias &lt;4 h con recargo</span></div></div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- ░░ FINAL CTA ░░ -->
+<section class="pad" style="padding-top:0">
+  <div class="wrap">
+    <div class="final reveal">
+      <h2>¿Tu tablero salta o no estás seguro de tu instalación?</h2>
+      <p>Hablemos técnicamente: cuéntame el síntoma —disparos del diferencial, calentamiento, caída de tensión o ampacidad insuficiente— y agendamos diagnóstico en terreno.</p>
+      <a class="btn btn-amp" href="https://wa.me/56985295633?text=Hola%20EMC%2C%20quiero%20cotizar%20un%20trabajo%20el%C3%A9ctrico" target="_blank" rel="noopener" style="font-size:1.05rem;padding:16px 30px">Escribir por WhatsApp →</a>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <a class="brand" href="#top" style="margin-bottom:14px">
+          <svg viewBox="0 0 200 200" style="width:40px;height:40px" aria-hidden="true"><use href="#emc-logo"/></svg>
+          <span><b>EMC Electricidad</b><small>Modernización eléctrica</small></span>
+        </a>
+        <p>Instalaciones eléctricas seguras, certificadas y de calidad.</p>
+      </div>
+      <div>
+        <h5>Contacto</h5>
+        <p><a href="https://wa.me/56985295633" target="_blank" rel="noopener">WhatsApp +56 9 8529 5633</a></p>
+        <p><a href="mailto:enso141@gmail.com">enso141@gmail.com</a></p>
+        <p>Calle Isla Mocha #508, Olmué</p>
+      </div>
+      <div>
+        <h5>Servicios</h5>
+        <p><a href="#servicios">Normalización TE‑1</a></p>
+        <p><a href="#servicios">Aumento de potencia</a></p>
+        <p><a href="#factor">Factor de potencia</a></p>
+        <p><a href="#servicios">Cargadores EV</a></p>
+      </div>
+    </div>
+    <div class="foot-bot">
+      <span>© 2026 EMC Electricidad · Construcciones DAQ · RUT 10.820.250‑0</span>
+      <span>Instalador SEC Clase A · Olmué, Región de Valparaíso</span>
+    </div>
+  </div>
+</footer>
+
+<a class="wa-float" href="https://wa.me/56985295633?text=Hola%20EMC%2C%20quiero%20cotizar" target="_blank" rel="noopener" aria-label="WhatsApp">
+  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M.057 24l1.687-6.163a11.867 11.867 0 01-1.587-5.946C.16 5.335 5.495 0 12.05 0a11.82 11.82 0 018.413 3.488 11.82 11.82 0 013.48 8.414c-.003 6.557-5.338 11.892-11.893 11.892a11.9 11.9 0 01-5.688-1.448L.057 24zM6.597 20.13c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884a9.86 9.86 0 001.51 5.26l-.999 3.648 3.978-.607zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+  <span>Cotiza gratis</span>
+</a>
+
+<script>
+// reveal on scroll
+const io=new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:.12});
+document.querySelectorAll('.reveal').forEach((el,i)=>{el.style.transitionDelay=(i%6*60)+'ms';io.observe(el)});
+// count-up
+const cu=new IntersectionObserver((es)=>{es.forEach(e=>{if(!e.isIntersecting)return;const el=e.target,t=+el.dataset.count;let n=0;const step=Math.max(1,Math.ceil(t/40));const tick=()=>{n+=step;if(n>=t){el.textContent=t}else{el.textContent=n;requestAnimationFrame(tick)}};tick();cu.unobserve(el)})},{threshold:.6});
+document.querySelectorAll('[data-count]').forEach(el=>cu.observe(el));
+
+// process timeline ignite
+const stp=document.getElementById('steps');
+if(stp){const so=new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){stp.classList.add('go');so.unobserve(stp)}})},{threshold:.4});so.observe(stp);}
+
+// scroll: progress bar + parallax (rAF throttled)
+const prog=document.getElementById('prog'),mark=document.querySelector('.hero-mark'),grid=document.querySelector('.bg-grid');
+let ticking=false;
+function onScroll(){
+  const y=window.scrollY, h=document.documentElement.scrollHeight-window.innerHeight;
+  if(prog)prog.style.width=(h>0?(y/h*100):0)+'%';
+  if(mark)mark.style.transform='translateY(calc(-50% + '+(y*0.12)+'px))';
+  if(grid)grid.style.transform='translateY('+(y*0.04)+'px)';
+  ticking=false;
+}
+window.addEventListener('scroll',()=>{if(!ticking){requestAnimationFrame(onScroll);ticking=true}},{passive:true});
+onScroll();
+
+// contact form -> WhatsApp composer
+const f=document.getElementById('ctaForm');
+if(f)f.addEventListener('submit',(e)=>{
+  e.preventDefault();
+  const nom=(document.getElementById('f-nom').value||'').trim();
+  const com=(document.getElementById('f-com').value||'').trim();
+  const srv=document.getElementById('f-srv').value;
+  const msg=(document.getElementById('f-msg').value||'').trim();
+  let t='Hola EMC, soy '+(nom||'(sin nombre)');
+  if(com)t+=' de '+com;
+  t+='.\nNecesito: '+srv+'.';
+  if(msg)t+='\nDetalle: '+msg;
+  window.open('https://wa.me/56985295633?text='+encodeURIComponent(t),'_blank','noopener');
+});
+</script>
+</body>
+</html>
