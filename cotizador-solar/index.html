@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="es-CL">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cotizador Solar · EMC Electricidad</title>
+<meta name="description" content="Calcula en 1 minuto cuántos paneles solares necesitas, tu ahorro mensual y el retorno de inversión. Net Billing Ley 21.118. EMC Electricidad — Instalador SEC Clase A.">
+<meta name="theme-color" content="#FFFFFF">
+<link rel="icon" type="image/svg+xml" href="../assets/logo-emc-mark.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;600&family=Sora:wght@600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/emc.css">
+<script>document.documentElement.classList.add('js')</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" defer></script>
+<style>
+/* ── propios del cotizador ── */
+.calc-wrap{max-width:880px;margin:0 auto}
+.page-hero.solapa .hero-inner{max-width:640px}
+.calc-solapa{position:relative;z-index:3;margin-top:-104px}
+.calc{padding:clamp(24px,4vw,44px);box-shadow:var(--sh-2)}
+.calc+.calc{margin-top:24px}
+.steptag{display:inline-flex;align-items:center;gap:8px;font-size:.88rem;font-weight:600;color:var(--blue-600)}
+.steptag::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--blue)}
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.field label{display:block;font-size:.92rem;font-weight:600;margin-bottom:8px}
+.field .hint{font-weight:400;color:var(--ink-2);font-size:.85rem}
+.field input,.field select{width:100%;min-height:52px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 14px;
+  font-size:1rem;color:var(--ink);outline:none;transition:border-color .2s,box-shadow .2s,background-color .2s}
+.field input:focus,.field select:focus{border-color:var(--blue);background:#fff;box-shadow:0 0 0 4px var(--blue-50)}
+.field input::placeholder{color:#5E6B85}
+.prefix{position:relative}
+.prefix span{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--ink-2);font-weight:600;pointer-events:none}
+.prefix input{padding-left:30px}
+#toggleAdv{width:100%;justify-content:flex-start;text-align:left;padding:12px 18px;border-radius:14px;color:var(--blue-600);box-shadow:inset 0 0 0 1px var(--blue-100);background:var(--blue-50)}
+#toggleAdv:hover{box-shadow:inset 0 0 0 1px var(--blue)}
+#calc{width:100%;min-height:56px;font-size:1.04rem}
+.advanced{display:none;margin-top:8px}
+.advanced.open{display:block;animation:aparece .35s ease}
+@keyframes aparece{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+.adv-block{margin-top:24px;padding-top:24px;border-top:1px solid var(--line)}
+.adv-block h4{font-size:1.05rem;margin-bottom:4px}
+.adv-block .sub{color:var(--ink-2);font-size:.9rem;margin-bottom:14px}
+#results{display:none}
+#results.show{display:block;animation:aparece .4s ease}
+.sol-kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:18px}
+.sol-kpi{background:var(--surface);border-radius:16px;padding:18px 14px;text-align:center}
+.sol-kpi .v{font-family:var(--display);font-weight:600;font-size:clamp(1.4rem,3.4vw,1.9rem);letter-spacing:-.03em;line-height:1;color:var(--ink)}
+.sol-kpi.acento .v{color:var(--blue-600)}
+.sol-kpi .l{font-size:.84rem;color:var(--ink-2);margin-top:8px}
+.savebar{margin:20px 0;border-radius:20px;padding:24px;text-align:center;color:#fff;
+  background:radial-gradient(60% 120% at 100% 0%,rgba(0,184,240,.35),rgba(0,184,240,0) 70%),linear-gradient(135deg,#0A5CFF,#0040C8)}
+.savebar .big{font-family:var(--display);font-weight:600;font-size:clamp(1.9rem,5vw,2.7rem);letter-spacing:-.03em;line-height:1.1}
+.savebar .lbl{font-size:.95rem;margin-top:4px}
+.detail{width:100%;border-collapse:collapse;margin:8px 0 4px;font-size:.95rem}
+.detail td{padding:12px 2px;border-bottom:1px solid var(--line)}
+.detail td:last-child{text-align:right;font-weight:600}
+.detail tr:last-child td{border-bottom:0}
+.note{margin-top:16px;padding:14px 16px;border-radius:14px;background:var(--blue-50);color:var(--ink);font-size:.9rem}
+.note.warn{background:#FFF6DB}
+.btn-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:20px}
+.disclaimer{color:var(--ink-2);font-size:.85rem;text-align:center;margin-top:16px}
+@media (max-width:640px){.sol-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:560px){.g2,.btn-row{grid-template-columns:minmax(0,1fr)}.calc-solapa{margin-top:-84px}}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap nav">
+    <a class="logo" href="../index.html"><img src="../assets/logo-emc.svg" alt="EMC Electricidad" width="180" height="34"></a>
+    <nav class="links" id="navlinks" aria-label="Principal">
+      <a href="../index.html#servicios">Servicios</a>
+      <a href="../index.html#diagnostico">Diagnóstico exprés</a>
+      <a href="../index.html#factor">Factor de potencia</a>
+      <a href="../index.html#cobertura">Cobertura</a>
+      <a href="../index.html#faq">Preguntas</a>
+      <a href="../index.html#contacto">Contacto</a>
+      <a class="solo-menu" href="./" aria-current="page">Cotizador solar</a>
+    </nav>
+    <div class="nav-cta">
+      <a class="btn btn-primary nav-wa" href="https://wa.me/56985295633" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 11.6a8 8 0 0 1-11.8 7l-4.2 1.2 1.2-4A8 8 0 1 1 20 11.6Z"/><path d="M9 9.2c.3 1.9 1.9 3.8 4 4.6l1.1-1.1 1.8.8-.4 1.7c-3.4.3-7.2-3.4-7.3-6.7l1.6-.6.9 1.8Z" stroke-width="1.2"/></svg>
+        <span class="txt">WhatsApp</span>
+      </a>
+      <button class="menu-btn" id="burger" type="button" aria-label="Menú" aria-expanded="false" aria-controls="navlinks">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path class="l1" d="M4 8h16"/><path class="l2" d="M4 16h16"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+<section class="hero page-hero solapa">
+  <div class="wrap">
+    <div class="hero-card">
+      <svg class="phases" viewBox="0 0 720 420" aria-hidden="true" fill="none" stroke-linecap="round">
+        <defs>
+          <linearGradient id="fade" x1="0" y1="0" x2="1" y2="0"><stop offset=".12" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity="1"/><stop offset="1" stop-color="#fff" stop-opacity="1"/></linearGradient>
+          <mask id="m"><rect width="720" height="420" fill="url(#fade)"/></mask>
+          <radialGradient id="orb" cx="40%" cy="35%" r="65%"><stop offset="0" stop-color="#fff"/><stop offset=".45" stop-color="#D8F6FF" stop-opacity=".9"/><stop offset="1" stop-color="#7FDBFF" stop-opacity=".25"/></radialGradient>
+          <radialGradient id="orbHalo" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#fff" stop-opacity=".5"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+        </defs>
+        <g mask="url(#m)">
+          <path class="p" d="M0 210c50-90 150-90 200 0s150 90 200 0s150-90 200 0s150 90 200 0s150-90 200 0s150 90 200 0s150-90 200 0s150 90 200 0" stroke="#fff" stroke-opacity=".7" stroke-width="2.2"/>
+          <path class="p p2" d="M-67 210c50-90 150-90 200 0s150 90 200 0s150-90 200 0s150 90 200 0s150-90 200 0s150 90 200 0s150-90 200 0s150 90 200 0" stroke="#fff" stroke-opacity=".42" stroke-width="1.8"/>
+          <path class="p p3" d="M-133 210c50-90 150-90 200 0s150 90 200 0s150-90 200 0s150 90 200 0s150-90 200 0s150 90 200 0s150-90 200 0s150 90 200 0" stroke="#fff" stroke-opacity=".26" stroke-width="1.6"/>
+        </g>
+        <circle cx="560" cy="210" r="110" fill="url(#orbHalo)"/>
+        <circle class="orb" cx="560" cy="210" r="46" fill="url(#orb)" stroke="#fff" stroke-opacity=".7"/>
+        <circle cx="560" cy="210" r="76" stroke="#fff" stroke-opacity=".22"/>
+      </svg>
+      <div class="hero-inner">
+        <p class="chip">Net Billing · Ley 21.118</p>
+        <h1>¿Cuánto ahorras con <span>paneles solares</span>?</h1>
+        <p class="lead">Calcula en 1 minuto tu sistema, ahorro mensual y retorno de inversión. Sin compromiso. Diseño e instalación certificada SEC Clase A.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="wrap">
+<div class="calc-wrap calc-solapa">
+<section class="card calc" aria-label="Datos para el cálculo">
+  <div class="steptag">Paso 1 · Lo mínimo</div>
+  <div class="grid g2" style="margin-top:16px">
+    <div class="field">
+      <label for="gasto">Gasto mensual en luz <span class="hint">(promedio CLP)</span></label>
+      <div class="prefix"><span aria-hidden="true">$</span><input id="gasto" type="number" inputmode="numeric" placeholder="80.000" min="0"></div>
+    </div>
+    <div class="field">
+      <label for="region">Región</label>
+      <select id="region"></select>
+    </div>
+  </div>
+
+  <button class="btn-ghost btn" id="toggleAdv" type="button" aria-expanded="false" aria-controls="advanced" style="margin-top:18px">▾ Afinar estimado (opcional, más preciso)</button>
+
+  <div class="advanced" id="advanced">
+    <div class="adv-block">
+      <h4>Paso 2 · Tu instalación</h4>
+      <p class="sub">Mejora el cálculo de autoconsumo.</p>
+      <div class="grid g2">
+        <div class="field"><label for="tipo">Tipo de cliente</label>
+          <select id="tipo">
+            <option value="resid">Casa / Residencial</option>
+            <option value="comercio">Comercio / Oficina</option>
+            <option value="industrial">Industrial / Agrícola</option>
+          </select></div>
+        <div class="field"><label for="techo">Tipo de techo</label>
+          <select id="techo">
+            <option value="teja">Teja</option>
+            <option value="zinc">Zinc / Acero</option>
+            <option value="losa">Losa plana</option>
+            <option value="membrana">Membrana / Otro</option>
+          </select></div>
+      </div>
+    </div>
+    <div class="adv-block">
+      <h4>Paso 3 · Datos exactos</h4>
+      <p class="sub">Si los tienes a mano, el estimado se ajusta de verdad.</p>
+      <div class="grid g2">
+        <div class="field"><label for="kwh">Consumo mensual <span class="hint">(kWh, reemplaza el gasto)</span></label>
+          <input id="kwh" type="number" inputmode="numeric" placeholder="450" min="0"></div>
+        <div class="field"><label for="tarifa">Tarifa</label>
+          <select id="tarifa">
+            <option value="">Según región</option>
+            <option value="160">BT1 residencial</option>
+            <option value="135">BT2</option>
+            <option value="120">BT3</option>
+            <option value="110">BT4</option>
+          </select></div>
+        <div class="field"><label for="area">Área de techo disponible <span class="hint">(m²)</span></label>
+          <input id="area" type="number" inputmode="numeric" placeholder="40" min="0"></div>
+        <div class="field"><label for="orient">Orientación del techo</label>
+          <select id="orient">
+            <option value="1">Norte (ideal)</option>
+            <option value="0.97">Nororiente / Norponiente</option>
+            <option value="0.9">Oriente / Poniente</option>
+            <option value="0.78">Sur</option>
+          </select></div>
+      </div>
+    </div>
+  </div>
+
+  <button class="btn btn-primary btn-amp" id="calc" type="button" style="margin-top:24px">Calcular mi ahorro <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+</section>
+
+<section class="card calc" id="results" aria-live="polite">
+  <div class="steptag">Tu sistema solar estimado</div>
+  <div class="sol-kpis">
+    <div class="sol-kpi acento"><div class="v" id="r-kwp">—</div><div class="l">kWp potencia</div></div>
+    <div class="sol-kpi"><div class="v" id="r-paneles">—</div><div class="l">paneles 550 W</div></div>
+    <div class="sol-kpi"><div class="v" id="r-prod">—</div><div class="l">kWh / mes</div></div>
+    <div class="sol-kpi acento"><div class="v" id="r-payback">—</div><div class="l">años payback</div></div>
+  </div>
+
+  <div class="savebar">
+    <div class="big" id="r-ahorro">—</div>
+    <div class="lbl">ahorro estimado al mes · <span id="r-ahorroanual">—</span> al año</div>
+  </div>
+
+  <table class="detail">
+    <tr><td>Consumo estimado</td><td id="d-consumo">—</td></tr>
+    <tr><td>Producción del sistema</td><td id="d-prod">—</td></tr>
+    <tr><td>Cobertura de tu consumo</td><td id="d-cob">—</td></tr>
+    <tr><td>Inversión estimada</td><td id="d-inv">—</td></tr>
+    <tr><td>Área de techo requerida</td><td id="d-area">—</td></tr>
+  </table>
+
+  <div class="note" id="r-note"></div>
+
+  <div class="btn-row">
+    <button class="btn btn-ghost btn-pdf" id="pdf" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg> Descargar cotización PDF</button>
+    <a class="btn btn-primary btn-wa" id="wa" href="#" target="_blank" rel="noopener">Cotización formal por WhatsApp</a>
+  </div>
+  <p class="disclaimer">Estimación preliminar referencial. La cotización final se define con visita técnica (diseño + tramitación SEC).</p>
+</section>
+</div>
+</div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="foot">
+      <div>
+        <a class="logo" href="../index.html"><img src="../assets/logo-emc.svg" alt="EMC Electricidad" width="180" height="34" loading="lazy"></a>
+        <p class="about">EMC Electricidad — Modernización eléctrica certificada.</p>
+        <dl>
+          <dt>Profesional responsable</dt><dd>Edinson Moreno Carrasco · Instalador Eléctrico SEC Clase A</dd>
+          <dt>Razón social</dt><dd>Construcciones DAQ</dd>
+        </dl>
+      </div>
+      <div>
+        <h2 class="foot-h">Contacto</h2>
+        <ul>
+          <li><a href="https://wa.me/56985295633">+56 9 8529 5633</a></li>
+          <li><a href="mailto:enso141@gmail.com">enso141@gmail.com</a></li>
+          <li>Olmué, Región de Valparaíso</li>
+        </ul>
+      </div>
+      <div>
+        <h2 class="foot-h">Para instaladores</h2>
+        <ul>
+          <li><a class="destacado" href="../instaladores.html">Planos SEC para instaladores</a></li>
+          <li><a href="./" aria-current="page">Cotizador solar</a></li>
+          <li><a href="../index.html#servicios">Servicios</a></li>
+        </ul>
+      </div>
+    </div>
+    <p class="legal-largo">Net Billing bajo Ley 21.118 / 21.505 (autogeneración hasta 300 kW). Los valores de ahorro, producción y retorno son estimaciones referenciales basadas en radiación promedio por región (Explorador Solar) y precios de mercado 2026; no constituyen una oferta vinculante. El dimensionamiento definitivo requiere visita técnica, análisis de consumo real y diseño según RIC / pliego de Generación Distribuida.</p>
+    <div class="legal">
+      <span>© 2026 EMC Electricidad · Construcciones DAQ. Todos los derechos reservados.</span>
+      <span>Normativa: RIC · NFPA 70E · IEC</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ── cabecera: menú completo si cabe; si no (o bajo 900 px), menú compacto ── */
+(function(){
+  const cab = document.querySelector('.site-header'), nav = cab.querySelector('.nav');
+  const links = document.getElementById('navlinks'), burger = document.getElementById('burger');
+  const angosto = matchMedia('(max-width: 900px)');
+  function menu(abrir){ links.classList.toggle('abierto', abrir); burger.setAttribute('aria-expanded', abrir ? 'true' : 'false'); }
+  function desborda(){ return nav.scrollWidth > nav.clientWidth + 1 || links.scrollWidth > links.clientWidth + 1; }
+  function ajustar(){
+    const abierto = links.classList.contains('abierto');
+    cab.classList.remove('compacta');
+    if(angosto.matches || desborda()) cab.classList.add('compacta');
+    if(!cab.classList.contains('compacta') && abierto) menu(false);
+  }
+  let raf; addEventListener('resize', () => { cancelAnimationFrame(raf); raf = requestAnimationFrame(ajustar); });
+  ajustar(); if(document.fonts) document.fonts.ready.then(ajustar);
+  burger.addEventListener('click', () => menu(!links.classList.contains('abierto')));
+  links.querySelectorAll('a').forEach(a => a.addEventListener('click', () => menu(false)));
+  addEventListener('keydown', e => { if(e.key === 'Escape' && links.classList.contains('abierto')){ menu(false); burger.focus(); } });
+  addEventListener('scroll', () => cab.classList.toggle('scrolled', scrollY > 8), {passive:true});
+})();
+/* ── aparición al scroll (sin JS todo se ve) ── */
+(function(){
+  if(!('IntersectionObserver' in window) || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const io = new IntersectionObserver(es => es.forEach(e => {
+    if(e.isIntersecting){ e.target.classList.remove('pend'); io.unobserve(e.target); }
+  }), {threshold:.12, rootMargin:'0px 0px -40px 0px'});
+  document.querySelectorAll('.rev').forEach(el => { if(el.getBoundingClientRect().top > innerHeight){ el.classList.add('pend'); io.observe(el); } });
+})();
+</script>
+<script>
+// ---- Datos motor de cálculo ----
+// HSP = horas sol pico promedio anual (kWh/m²/día), aprox Explorador Solar Chile
+// p = CLP/kWh compra referencial BT1 ene-2026 por región (distribuidora dominante)
+// Fuentes: CNE precio de nudo, tarifas CGE/Enel/Chilquinta/Saesa 2026
+const REGIONES = [
+  {n:"Arica y Parinacota", hsp:6.6, p:165},  // Emelari
+  {n:"Tarapacá",           hsp:6.8, p:165},  // Eliqsa
+  {n:"Antofagasta",        hsp:7.0, p:165},  // Elecda
+  {n:"Atacama",            hsp:6.5, p:160},  // Emelat / CGE
+  {n:"Coquimbo",           hsp:6.0, p:140},  // CGE / Conafe
+  {n:"Valparaíso",         hsp:5.2, p:135},  // Chilquinta
+  {n:"Metropolitana",      hsp:5.3, p:125},  // Enel
+  {n:"O'Higgins",          hsp:5.2, p:145},  // CGE
+  {n:"Maule",              hsp:5.0, p:148},  // CGE
+  {n:"Ñuble",              hsp:4.8, p:150},  // CGE
+  {n:"Biobío",             hsp:4.5, p:150},  // CGE / Frontel
+  {n:"La Araucanía",       hsp:4.2, p:155},  // Frontel / CGE
+  {n:"Los Ríos",           hsp:3.9, p:155},  // Saesa
+  {n:"Los Lagos",          hsp:3.7, p:158},  // Saesa
+  {n:"Aysén",              hsp:3.3, p:190},  // Edelaysen (sistema aislado)
+  {n:"Magallanes",         hsp:3.0, p:185},  // Edelmag (sistema aislado)
+];
+const WP_PANEL = 550;        // W por panel
+const AREA_PANEL = 2.4;      // m² por panel (incl. separación)
+const PR = 0.80;             // performance ratio
+const INY_RATIO = 0.50;      // inyección Net Billing valorizada ~50% del precio de compra (BT1)
+// $/kWp instalado segun tamaño, mercado residencial Chile 2026 (sistemas chicos cuestan mas por kWp)
+function precioKwp(kwp){ if(kwp<=3) return 1250000; if(kwp<=10) return 1050000; return 850000; }
+// fraccion de autoconsumo segun perfil
+const AUTO = {resid:0.38, comercio:0.60, industrial:0.70};
+
+const $=id=>document.getElementById(id);
+const fmt=n=>"$"+Math.round(n).toLocaleString("es-CL");
+const fmt0=n=>Math.round(n).toLocaleString("es-CL");
+
+// poblar regiones
+REGIONES.forEach((r,i)=>{const o=document.createElement("option");o.value=i;o.textContent=r.n;$("region").appendChild(o);});
+$("region").value=6; // Metropolitana por defecto
+
+$("toggleAdv").addEventListener("click",e=>{
+  const a=$("advanced");a.classList.toggle("open");
+  e.target.textContent=(a.classList.contains("open")?"▴ Ocultar":"▾ Afinar estimado (opcional, más preciso)");
+  e.target.setAttribute("aria-expanded",a.classList.contains("open")?"true":"false");
+});
+
+let last=null; // guarda ultimo calculo para PDF/WhatsApp
+
+function calcular(){
+  const reg=REGIONES[+$("region").value];
+  const tipo=$("tipo").value;
+  const orient=parseFloat($("orient").value)||1;
+  const tarifa=parseFloat($("tarifa").value)||0;
+  const precioKwh = tarifa>0 ? tarifa : reg.p;
+
+  // consumo mensual kWh
+  let kwhMes = parseFloat($("kwh").value)||0;
+  const gasto = parseFloat($("gasto").value)||0;
+  if(!kwhMes){
+    if(!gasto){ alert("Ingresa tu gasto mensual en luz o tu consumo en kWh."); return; }
+    kwhMes = gasto/precioKwh;
+  }
+  const gastoMes = gasto>0 ? gasto : kwhMes*precioKwh;
+
+  // dimensionar para cubrir ~100% del consumo
+  const consumoDia = kwhMes/30;
+  let kwpIdeal = consumoDia/(reg.hsp*PR*orient);
+  let paneles = Math.max(2, Math.round(kwpIdeal*1000/WP_PANEL));
+
+  // limitar por area de techo si la dieron
+  const area = parseFloat($("area").value)||0;
+  let capadoArea=false;
+  if(area>0){
+    const maxP=Math.floor(area/AREA_PANEL);
+    if(maxP>0 && paneles>maxP){ paneles=maxP; capadoArea=true; }
+  }
+  const kwp = paneles*WP_PANEL/1000;
+
+  // produccion mensual
+  const prodMes = kwp*reg.hsp*30*PR*orient;
+  const cobertura = Math.min(1, prodMes/kwhMes);
+
+  // ahorro Net Billing
+  const auto = Math.min(prodMes*AUTO[tipo], kwhMes);   // autoconsumo directo
+  const iny  = Math.max(0, prodMes-auto);              // excedente inyectado
+  const ahorroMes = auto*precioKwh + iny*precioKwh*INY_RATIO;
+  const ahorroAnual = ahorroMes*12;
+
+  const inversion = kwp*precioKwp(kwp);
+  const payback = ahorroAnual>0 ? inversion/ahorroAnual : 0;
+  const areaReq = paneles*AREA_PANEL;
+
+  // pintar
+  $("r-kwp").textContent=kwp.toFixed(1);
+  $("r-paneles").textContent=paneles;
+  $("r-prod").textContent=fmt0(prodMes);
+  $("r-payback").textContent=payback?payback.toFixed(1):"—";
+  $("r-ahorro").textContent=fmt(ahorroMes);
+  $("r-ahorroanual").textContent=fmt(ahorroAnual);
+  $("d-consumo").textContent=fmt0(kwhMes)+" kWh/mes ("+fmt(gastoMes)+")";
+  $("d-prod").textContent=fmt0(prodMes)+" kWh/mes";
+  $("d-cob").textContent=Math.round(cobertura*100)+"%";
+  $("d-inv").textContent="desde "+fmt(inversion);
+  $("d-area").textContent=fmt0(areaReq)+" m²";
+
+  let note="Sistema dimensionado para cubrir ~"+Math.round(cobertura*100)+"% de tu consumo en "+reg.n+" (radiación "+reg.hsp+" HSP). El ahorro combina autoconsumo + inyección de excedentes (Net Billing).";
+  const noteEl=$("r-note");noteEl.className="note";
+  if(capadoArea){ note="⚠️ El sistema se ajustó al área de techo que indicaste ("+fmt0(area)+" m²): cubre ~"+Math.round(cobertura*100)+"% de tu consumo. Con más techo el ahorro sube."; noteEl.className="note warn"; }
+  noteEl.textContent=note;
+
+  last={reg:reg.n,hsp:reg.hsp,tipo,kwhMes,gastoMes,kwp,paneles,prodMes,cobertura,
+        ahorroMes,ahorroAnual,inversion,payback,areaReq,precioKwh};
+
+  // WhatsApp prellenado
+  const msg="Hola EMC Electricidad, usé el cotizador solar y quiero una cotización formal.%0A%0A"
+    +"📍 Región: "+reg.n+"%0A"
+    +"⚡ Consumo: "+fmt0(kwhMes)+" kWh/mes ("+fmt(gastoMes)+")%0A"
+    +"☀️ Sistema sugerido: "+kwp.toFixed(1)+" kWp / "+paneles+" paneles%0A"
+    +"💰 Ahorro estimado: "+fmt(ahorroMes)+"/mes%0A"
+    +"🧾 Inversión: desde "+fmt(inversion)+" (payback "+(payback?payback.toFixed(1):"—")+" años)";
+  $("wa").href="https://wa.me/56985295633?text="+msg;
+
+  const res=$("results");res.classList.add("show");
+  res.scrollIntoView({behavior:"smooth",block:"start"});
+}
+$("calc").addEventListener("click",calcular);
+
+// ---- PDF cotizacion preliminar EMC ----
+$("pdf").addEventListener("click",()=>{
+  if(!last){ alert("Primero calcula tu ahorro."); return; }
+  if(!window.jspdf){ alert("Cargando generador PDF, intenta de nuevo en un segundo."); return; }
+  const {jsPDF}=window.jspdf;
+  const doc=new jsPDF({unit:"mm",format:"a4"});
+  const BLUE=[31,78,121], AMBER=[255,192,0], GRAY=[90,90,90];
+  const L=18, R=192, W=R-L;
+  const hoy=new Date().toLocaleDateString("es-CL");
+
+  // cabecera
+  doc.setFillColor(...BLUE);doc.rect(0,0,210,30,"F");
+  doc.setFillColor(...AMBER);doc.rect(0,30,210,1.6,"F");
+  doc.setTextColor(255,255,255);doc.setFont("helvetica","bold");doc.setFontSize(19);
+  doc.text("EMC ELECTRICIDAD",L,15);
+  doc.setFont("helvetica","normal");doc.setFontSize(9);
+  doc.text("Construcciones DAQ · Instalador Eléctrico SEC Clase A",L,21);
+  doc.text("Modernización Eléctrica · Energía Solar Net Billing",L,25.5);
+  doc.setFontSize(8);doc.text("+56 9 8529 5633",R,15,{align:"right"});
+  doc.text("Olmué, Valparaíso",R,20,{align:"right"});
+
+  let y=44;
+  doc.setTextColor(...BLUE);doc.setFont("helvetica","bold");doc.setFontSize(14);
+  doc.text("Cotización Preliminar · Sistema Solar Fotovoltaico",L,y);
+  doc.setTextColor(...GRAY);doc.setFont("helvetica","normal");doc.setFontSize(9);
+  doc.text("Fecha: "+hoy+"   ·   Documento referencial, no vinculante",L,y+6);
+  y+=16;
+
+  // bloque datos
+  const row=(k,v,bold)=>{
+    doc.setDrawColor(225,230,238);doc.line(L,y+2.5,R,y+2.5);
+    doc.setTextColor(60,60,60);doc.setFont("helvetica","normal");doc.setFontSize(10);
+    doc.text(k,L,y);
+    doc.setTextColor(...(bold?BLUE:[40,40,40]));doc.setFont("helvetica",bold?"bold":"normal");
+    doc.text(String(v),R,y,{align:"right"});
+    y+=9;
+  };
+  doc.setTextColor(...BLUE);doc.setFont("helvetica","bold");doc.setFontSize(11);
+  doc.text("Tus datos",L,y);y+=8;
+  row("Región",last.reg);
+  row("Radiación solar (HSP)",last.hsp+" h sol pico/día");
+  row("Consumo estimado",fmt0(last.kwhMes)+" kWh/mes  ("+fmt(last.gastoMes)+")");
+
+  y+=4;
+  doc.setTextColor(...BLUE);doc.setFont("helvetica","bold");doc.setFontSize(11);
+  doc.text("Sistema sugerido",L,y);y+=8;
+  row("Potencia instalada",last.kwp.toFixed(1)+" kWp");
+  row("Paneles (550 W)",last.paneles+" unidades");
+  row("Producción estimada",fmt0(last.prodMes)+" kWh/mes");
+  row("Cobertura de consumo",Math.round(last.cobertura*100)+" %");
+  row("Área de techo requerida",fmt0(last.areaReq)+" m²");
+
+  y+=6;
+  // recuadro ahorro
+  doc.setFillColor(255,247,222);doc.setDrawColor(...AMBER);
+  doc.roundedRect(L,y,W,26,3,3,"FD");
+  doc.setTextColor(...BLUE);doc.setFont("helvetica","bold");doc.setFontSize(10);
+  doc.text("AHORRO ESTIMADO",L+6,y+8);
+  doc.setFontSize(20);doc.text(fmt(last.ahorroMes)+" /mes",L+6,y+19);
+  doc.setFont("helvetica","normal");doc.setFontSize(10);doc.setTextColor(...GRAY);
+  doc.text(fmt(last.ahorroAnual)+" / año",R-6,y+9,{align:"right"});
+  doc.setTextColor(...BLUE);doc.setFont("helvetica","bold");doc.setFontSize(11);
+  doc.text("Inversión desde "+fmt(last.inversion),R-6,y+17,{align:"right"});
+  doc.setFont("helvetica","normal");doc.setFontSize(9);doc.setTextColor(...GRAY);
+  doc.text("Payback ~"+(last.payback?last.payback.toFixed(1):"—")+" años",R-6,y+22,{align:"right"});
+  y+=34;
+
+  // disclaimer
+  doc.setTextColor(...GRAY);doc.setFont("helvetica","normal");doc.setFontSize(7.6);
+  const disc="Estimación preliminar referencial bajo Ley 21.118 (Net Billing). Valores basados en radiación promedio regional (Explorador Solar) y precios de mercado 2026 (panel 550 W, PR 0,80, valorización de inyección referencial). No constituye oferta vinculante. El dimensionamiento, presupuesto y ahorro definitivos se determinan con visita técnica, análisis de consumo real (12 meses) y diseño conforme al pliego de Generación Distribuida y normativa SEC vigente. Incluye gestión de tramitación SEC (TE) y solicitud de conexión Net Billing ante la distribuidora.";
+  doc.text(doc.splitTextToSize(disc,W),L,y);y+=disc.length>250?28:22;
+
+  // CTA pie
+  doc.setFillColor(...BLUE);doc.rect(0,272,210,25,"F");
+  doc.setTextColor(255,255,255);doc.setFont("helvetica","bold");doc.setFontSize(11);
+  doc.text("¿Avanzamos con tu proyecto solar?",L,282);
+  doc.setFont("helvetica","normal");doc.setFontSize(10);
+  doc.text("WhatsApp +56 9 8529 5633   ·   enso141@gmail.com",L,289);
+  doc.setTextColor(...AMBER);doc.setFont("helvetica","bold");
+  doc.text("EMC ELECTRICIDAD",R,289,{align:"right"});
+
+  doc.save("Cotizacion-Solar-EMC-"+last.reg.replace(/[^a-zA-Z]/g,"")+".pdf");
+});
+</script>
+</body>
+</html>
